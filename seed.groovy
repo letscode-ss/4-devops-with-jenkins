@@ -5,9 +5,9 @@ import hudson.*
 def jenkinsJob(jobName,repoUrl,credID,jenkinsFile) {
     pipelineJob(jobName).with {
         parameters {
-                stringParam('teamName', 'test-X', 'team name')
-                stringParam('jenkinsUrl', 'jenkins.com', 'Jenkins url prefix')
-                stringParam('orgName', 'jenkins.com', 'Jenkins url prefix')
+                stringParam('teamName', 'team-a', 'team name')
+                stringParam('jenkinsUrlPrefix', 'test-jenkins.com', 'Jenkins url prefix. Once provitioning is done jenkins url will be <teamName>.<jenkinsUrlPrefix> ex. http://team-a.test-jenkins.com/')
+                stringParam('orgName', 'jenkins.com', 'Gihub orgnization name')
                 stringParam('OAuthClientID', 'XXXXXXXXXXX', 'OAuth application client id')
                 stringParam('OAuthClientSecret', 'XXXXXXXXX', 'OAuth application client secret(NOT SECURE)')
         }
