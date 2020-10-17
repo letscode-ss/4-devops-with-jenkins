@@ -22,16 +22,16 @@ pipeline {
             steps {
                 script { 
                     sh """
-                        gh repo view \${orgName}/\${repoConfig}
+                        gh repo view ${orgName}/${repoConfig}
                         if [ $? -eq 0 ]; then 
-                            gh repo create \${repoConfig} -y --private
-                            cp -r  charts/jenkins/VALUES_SUMMARY.md \${repoConfig}/
-                            cp -r  charts/jenkins/values.yaml \${repoConfig}/
-                            gh repo clone  \${repoConfig}
-                            git add \${repoConfig}/ && git commit -m "updating config code" && git push -u origin master
+                            gh repo create ${repoConfig} -y --private
+                            cp -r  charts/jenkins/VALUES_SUMMARY.md ${repoConfig}/
+                            cp -r  charts/jenkins/values.yaml ${repoConfig}/
+                            gh repo clone  ${repoConfig}
+                            git add ${repoConfig}/ && git commit -m 'updating config code' && git push -u origin master
                         else
                             echo Repo already exist
-                            gh repo clone \${repoConfig}
+                            gh repo clone ${repoConfig}
                         fi
                     """
                 }
