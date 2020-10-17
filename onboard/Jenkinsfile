@@ -30,7 +30,7 @@ pipeline {
                             gh repo clone  \${repoConfig}
                             git add \${repoConfig}/ && git commit -m "updating config code" && git push -u origin master
                         else
-                            echo "Repo already exist"
+                            echo Repo already exist
                             gh repo clone \${repoConfig}
                         fi
                     """
