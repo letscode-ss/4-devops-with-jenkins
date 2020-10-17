@@ -1,0 +1,73 @@
+
+
+pipeline {
+    agent { label 'agent' }
+    environment {
+        orgName="${params.orgName}"
+        jenkinsUrl="${params.teamName}.${params.jenkinsUrlPrefix}"
+        repoConfig="${params.teamName}-jenkins-config"
+        namespace="${params.teamName}-${params.costCenter}"
+    }
+    stages {
+        stage("GHE Login") { 
+            steps {
+                script { 
+                    sh """
+                        gh auth login --with-token < /tmp/token.txt
+                    """
+                }
+            }
+        }
+        stage("Create jenkins config") { 
+            steps {
+                script { 
+                    sh """
+                        gh repo view ${orgName}/${repoConfig} >> /dev/null
+                        if [ $? -eq 0 ]; then 
+                            gh repo create ${repoConfig} -y --private
+                            cp -r  charts/jenkins/VALUES_SUMMARY.md ${repoConfig}/
+                            cp -r  charts/jenkins/values.yaml ${repoConfig}/
+                            gh repo clone  ${repoConfig}
+                            git add ${repoConfig}/ && git commit -m "updating config code" && git push -u origin master
+                        else
+                            echo "Repo already exist"
+                            gh repo clone ${repoConfig}
+                        fi
+                    """
+                }
+            }
+        }
+        /*
+        stage("Cluster Auth") { 
+            steps {
+                script { 
+                    gcloud auth
+                }
+            }
+        }*/
+        stage("Install Jenkis") { 
+            steps {
+                script {                 
+                    git url: "https://github.com/${repoConfig}.git"
+                    sh """
+                        kubectl create namespace ${namespace}
+                        helm upgrade --install jenkins-${namespace} --values ${repoConfig}/values.yaml charts/jenkins/
+                    """
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                sh """
+                   echo gh logout
+                   echo gh auth logout
+                """
+            }
+        }
+    }
+}
+
+
+
