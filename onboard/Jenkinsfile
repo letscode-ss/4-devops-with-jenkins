@@ -8,7 +8,7 @@ pipeline {
         repoConfig="${params.teamName}-jenkins-config"
         namespace="${params.teamName}-${params.costCenter}"
         cluster="${params.cluster}"
-        tokenAuth="${params.gheToken}"
+        tokenAuth="${params.gheTokenCreds}"
         region="${params.region}"
     }
     stages {
