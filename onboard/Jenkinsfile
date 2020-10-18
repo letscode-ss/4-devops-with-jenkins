@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script { 
                     sh """
-                        gh repo view $orgName/$repoConfig
+                        gh repo view $orgName/$repoConfig 2> /dev/null > /dev/null
                         if [ \$? -eq 0 ]; then 
                             gh repo create $repoConfig -y --private
                             gh repo clone  $repoConfig || echo clone already exist
