@@ -15,7 +15,7 @@ pipeline {
         stage("GHE Login") { 
             steps {
                 script { 
-                    withCredentials([string(credentialsId: ${tokenAuth}, variable: 'TOKEN')]) {
+                    withCredentials([string(credentialsId: tokenAuth, variable: 'TOKEN')]) {
                         sh """
                                 echo ${TOKEN} > /tmp/token.txt
                                 gh auth login --with-token < /tmp/token.txt
