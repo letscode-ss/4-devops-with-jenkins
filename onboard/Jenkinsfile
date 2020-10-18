@@ -24,14 +24,14 @@ pipeline {
                     sh """
                         gh repo view $orgName/$repoConfig || export exitcode=\$?
                         if [ \$exitcode -ne 0 ]; then 
-                            gh repo create $repoConfig -y --private
-                            gh repo clone  $repoConfig || echo clone already exist
-                            cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/
-                            cp -r  charts/jenkins/values.yaml $repoConfig}/
+                            gh repo create $orgName/$repoConfig -y --private
+                            gh repo clone  $orgName/$repoConfig || echo clone already exist
+                            cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
+                            cp -r  charts/jenkins/values.yaml $repoConfig}/values.yaml
                             cd $repoConfig && git add VALUES_SUMMARY.md values.yaml && git commit -m "updating config code" && git push -u origin master
                         else
                             echo Repo already exist
-                            gh repo clone $repoConfig
+                            gh repo clone $orgName/$repoConfig
                         fi
                     """
                 }
@@ -48,9 +48,12 @@ pipeline {
         stage("Install Jenkis") { 
             steps {
                 script {                 
-                    git url: "https://github.com/${repoConfig}.git"
+                    git url: "https://github.com/${orgName}/${repoConfig}.git"
                     sh """
-                        kubectl create namespace ${namespace}
+                        sed -i s/NAMESPACE/${namespace}/g onboard/namespace.yaml
+                        sed -i s/NAMESPACE/${namespace}/g onboard/serviceaccount.yaml
+                        kubectl apply -f k8s-onboarding/namespace.yaml
+                        kubectl apply -f k8s-onboarding/serviceaccount.yaml
                         helm upgrade --install jenkins-${namespace} --values ${repoConfig}/values.yaml charts/jenkins/
                     """
                 }
