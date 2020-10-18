@@ -18,6 +18,7 @@ In this project i have create solution to provition and manage jenkins instance 
   - Create a namespace for the team 
   - Create a service account for team.
   - Perform helm release of jenkins.
+![snap-3](docs//snap-3.png)
 
 Logs
 ```
