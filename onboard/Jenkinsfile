@@ -22,14 +22,17 @@ pipeline {
             steps {
                 script { 
                     sh """
+                        #!/bin/bash -vx
                         gh repo view $orgName/$repoConfig || export exitcode=\$?
                         if [ \$exitcode -ne 0 ]; then 
                             rm -rf .git
                             gh repo create $orgName/$repoConfig -y --private
+                            gh repo clone $orgName/$repoConfig || echo checkout already exist
                             cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
                             cp -r  charts/jenkins/values.yaml $repoConfig}/values.yaml
                             cd $repoConfig && git add VALUES_SUMMARY.md values.yaml && git commit -m "updating config code" && git push -u origin master
                         else
+                            rm -rf .git
                             echo Repo already exist
                             gh repo clone $orgName/$repoConfig
                         fi
@@ -50,10 +53,11 @@ pipeline {
                 script {                 
                     git url: "https://github.com/${orgName}/${repoConfig}.git"
                     sh """
-                        sed -i s/NAMESPACE/${namespace}/g onboard/namespace.yaml
-                        sed -i s/NAMESPACE/${namespace}/g onboard/serviceaccount.yaml
-                        kubectl apply -f k8s-onboarding/namespace.yaml
-                        kubectl apply -f k8s-onboarding/serviceaccount.yaml
+                        sed  's/NAMESPACE/${namespace}/g' onboard/namespace.yaml  > onboard/namespace-apply.yaml
+                        sed  's/NAMESPACE/${namespace}/g' onboard/serviceaccount.yaml > onboard/serviceaccount-apply.yaml
+                        
+                        kubectl apply -f onboard/namespace-apply.yaml
+                        kubectl apply -f onboard/serviceaccount-apply.yaml
                         helm upgrade --install jenkins-${namespace} --values ${repoConfig}/values.yaml charts/jenkins/
                     """
                 }
