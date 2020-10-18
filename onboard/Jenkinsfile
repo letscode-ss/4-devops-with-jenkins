@@ -24,8 +24,8 @@ pipeline {
                     sh """
                         gh repo view $orgName/$repoConfig || export exitcode=\$?
                         if [ \$exitcode -ne 0 ]; then 
+                            rm -rf .git
                             gh repo create $orgName/$repoConfig -y --private
-                            gh repo clone  $orgName/$repoConfig || echo clone already exist
                             cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
                             cp -r  charts/jenkins/values.yaml $repoConfig}/values.yaml
                             cd $repoConfig && git add VALUES_SUMMARY.md values.yaml && git commit -m "updating config code" && git push -u origin master
