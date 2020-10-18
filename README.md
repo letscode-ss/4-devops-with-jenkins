@@ -38,14 +38,14 @@ Masking supported pattern matches of $TOKEN
 [Pipeline] {
 [Pipeline] sh
 + rm -rf /Users/shisharm18/jenkins_docker_home/home/workspace/SelfService/Onboard-To-Jenkins/.git
-+ gh repo view configuration-org/team-a-jenkins-config
-GraphQL error: Could not resolve to a Repository with the name 'configuration-org/team-a-jenkins-config'.
++ gh repo view letscode-ss/team-a-jenkins-config
+GraphQL error: Could not resolve to a Repository with the name 'letscode-ss/team-a-jenkins-config'.
 + export exitcode=1
 + exitcode=1
 + '[' 1 -ne 0 ']'
-+ gh repo create configuration-org/team-a-jenkins-config -y --private
-https://github.com/configuration-org/team-a-jenkins-config
-+ gh repo clone configuration-org/team-a-jenkins-config
++ gh repo create letscode-ss/team-a-jenkins-config -y --private
+https://github.com/letscode-ss/team-a-jenkins-config
++ gh repo clone letscode-ss/team-a-jenkins-config
 Cloning into 'team-a-jenkins-config'...
 warning: You appear to have cloned an empty repository.
 + cp -r charts/jenkins/VALUES_SUMMARY.md team-a-jenkins-config/VALUES_SUMMARY.md
@@ -59,7 +59,7 @@ warning: You appear to have cloned an empty repository.
  create mode 100644 VALUES_SUMMARY.md
  create mode 100644 values.yaml
 + git push -u origin master
-To https://github.com/configuration-org/team-a-jenkins-config.git
+To https://github.com/letscode-ss/team-a-jenkins-config.git
  * [new branch]      master -> master
 Branch 'master' set up to track remote branch 'master' from 'origin'.
 [Pipeline] }
