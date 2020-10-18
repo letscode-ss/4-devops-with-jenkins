@@ -23,7 +23,7 @@ pipeline {
                 script { 
                     sh """
                         gh repo view $orgName/$repoConfig
-                        if [ $? -eq 0 ]; then 
+                        if [ \$? -eq 0 ]; then 
                             gh repo create $repoConfig -y --private
                             gh repo clone  $repoConfig || echo clone already exist
                             cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/
