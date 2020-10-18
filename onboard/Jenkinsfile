@@ -36,7 +36,7 @@ pipeline {
                             gh repo create $orgName/$repoConfig -y --private
                             gh repo clone $orgName/$repoConfig || echo checkout already exist
                             cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
-                            sed  's/jenkins.example.com/${jenkinsUrl}/g'   onboard/Readme.md > $repoConfig/Readme.md
+                            sed  's/jenkins.example.com/${jenkinsUrl}/g'   onboard/Readme.md > $repoConfig/values.yaml
                             sed  's/TEAMNAME/${teamName}/g' onboard/Readme.md > $repoConfig/Readme.md
                             cd $repoConfig && git add Readme.md VALUES_SUMMARY.md values.yaml && git commit -m "updating config code" && git push -u origin master
                         else
