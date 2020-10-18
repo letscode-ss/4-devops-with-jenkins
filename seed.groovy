@@ -8,7 +8,7 @@ def jenkinsJob(jobName,repoUrl,credID,jenkinsFile) {
                 stringParam('teamName', 'team-a', 'team name')
                 stringParam('jenkinsUrlPrefix', 'test-jenkins.com', 'Jenkins url prefix. Once provitioning is done jenkins url will be <teamName>.<jenkinsUrlPrefix> ex. http://team-a.test-jenkins.com/')
                 stringParam('orgName', 'configuration-org', 'Gihub orgnization name')
-                stringParam('gheTokenCreds', 'github_personal', 'Gihub Token credentail name')
+                stringParam('gheTokenCreds', 'teamA-ghe-token', 'Gihub Token credentail name')
                 stringParam('OAuthCred', 'teamA-creds', 'Jenkins credentail for oauth')
                 stringParam('costCenter', '21', 'cost center')
                 stringParam('cluster', 'cluster-1', 'Cluster name')
