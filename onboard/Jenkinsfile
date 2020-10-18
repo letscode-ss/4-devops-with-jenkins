@@ -22,8 +22,8 @@ pipeline {
             steps {
                 script { 
                     sh """
-                        gh repo view $orgName/$repoConfig 2> /dev/null > /dev/null
-                        if [ \$? -eq 0 ]; then 
+                        gh repo view $orgName/$repoConfig || export exitcode=\$?
+                        if [ \$exitcode -eq 0 ]; then 
                             gh repo create $repoConfig -y --private
                             gh repo clone  $repoConfig || echo clone already exist
                             cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/
