@@ -50,7 +50,7 @@ pipeline {
         stage("Install Jenkis") { 
             steps {
                 script {                 
-                    git url: "https://github.com/${orgName}/${repoConfig}.git"
+                    //git url: "https://github.com/${orgName}/${repoConfig}.git"
                     sh """
                         sed  's/NAMESPACE/${namespace}/g' onboard/namespace.yaml  > onboard/namespace-apply.yaml
                         sed  's/NAMESPACE/${namespace}/g' onboard/serviceaccount.yaml > onboard/serviceaccount-apply.yaml
