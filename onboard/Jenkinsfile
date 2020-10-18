@@ -1,22 +1,26 @@
 
 
 pipeline {
-    agent { label 'agent' }
+    agent { label 'master' }
     environment {
         orgName="${params.orgName}"
         jenkinsUrl="${params.teamName}.${params.jenkinsUrlPrefix}"
         repoConfig="${params.teamName}-jenkins-config"
         namespace="${params.teamName}-${params.costCenter}"
         cluster="${params.cluster}"
+        tokenAuth="${params.gheToken}"
         region="${params.region}"
     }
     stages {
         stage("GHE Login") { 
             steps {
                 script { 
-                    sh """
-                        gh auth login --with-token < /tmp/token.txt
-                    """
+                    withCredentials([string(credentialsId: ${tokenAuth}, variable: 'TOKEN')]) {
+                        sh """
+                                echo ${TOKEN} > /tmp/token.txt
+                                gh auth login --with-token < /tmp/token.txt
+                        """
+                    }
                 }
             }
         }
@@ -31,7 +35,8 @@ pipeline {
                             gh repo create $orgName/$repoConfig -y --private
                             gh repo clone $orgName/$repoConfig || echo checkout already exist
                             cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
-                            cp -r  charts/jenkins/values.yaml $repoConfig/values.yaml
+                            cp -r  onboard/Readme.md $repoConfig/Readme.md
+                            sed  's/jenkins.example.com/${jenkinsUrl}/g'  charts/jenkins/values.yaml > $repoConfig/values.yaml
                             cd $repoConfig && git add VALUES_SUMMARY.md values.yaml && git commit -m "updating config code" && git push -u origin master
                         else
                             echo Repo already exist
@@ -65,13 +70,21 @@ pipeline {
                 }
             }
         }
+        stage("Email Details") { 
+            steps {
+                script {                 
+                    echo "TODO: Email jenkins details to user"
+                }
+            }
+        }
     }
     post {
         always {
             script {
                 sh """
-                   echo gh logout
-                   echo gh auth logout
+                   rm -rf  /tmp/token.txt
+                   echo github logout
+                   # gh auth logout
                 """
             }
         }
