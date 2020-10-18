@@ -6,6 +6,10 @@ In this project i have create solution to provition and manage jenkins instance 
 - github orgnization
 - Jenkins instance
 - kuberenetes cluster (GKE)
+- gcloud cli
+- github cli >= 1.0.0
+- kubectl >= v1.12.0
+- helm >= v2.11.0
 
 ## How this solution works
 - Configure this repository as pipeline job in jenkins using Jenkinsfile.
@@ -181,3 +185,4 @@ jenkins-team-x-21-agent   ClusterIP   10.8.13.27    <none>        50000/TCP     
 - GHE oauth integration
 - Enable SSL
 - Enable Github orgnization job in jenkins
+- Switch onboarding pipeline agent from master to kubernetes to avoid many cli tools on master.
