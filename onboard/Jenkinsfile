@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script { 
                     sh """
-                        gh repo view "${orgName}/${repoConfig}"
+                        gh repo view \${orgName}/\${repoConfig}
                         if [ $? -eq 0 ]; then 
                             gh repo create ${repoConfig} -y --private
                             cp -r  charts/jenkins/VALUES_SUMMARY.md ${repoConfig}/
