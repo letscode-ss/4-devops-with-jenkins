@@ -7,6 +7,8 @@ pipeline {
         jenkinsUrl="${params.teamName}.${params.jenkinsUrlPrefix}"
         repoConfig="${params.teamName}-jenkins-config"
         namespace="${params.teamName}-${params.costCenter}"
+        cluster="${params.cluster}"
+        region="${params.region}"
     }
     stages {
         stage("GHE Login") { 
@@ -39,24 +41,23 @@ pipeline {
                 }
             }
         }
-        /*
         stage("Cluster Auth") { 
             steps {
                 script { 
-                    gcloud auth
+                    gcloud container clusters get-credentials ${cluster} --zone=us-central1-c
                 }
             }
-        }*/
+        }
         stage("Install Jenkis") { 
             steps {
                 script {                 
-                    //git url: "https://github.com/${orgName}/${repoConfig}.git"
                     sh """
                         sed  's/NAMESPACE/${namespace}/g' onboard/namespace.yaml  > onboard/namespace-apply.yaml
                         sed  's/NAMESPACE/${namespace}/g' onboard/serviceaccount.yaml > onboard/serviceaccount-apply.yaml
                         
                         kubectl apply -f onboard/namespace-apply.yaml
                         kubectl apply -f onboard/serviceaccount-apply.yaml
+                        kubectl config set-context --current --namespace=${namespace}
                         helm upgrade --install jenkins-${namespace} --values ${repoConfig}/values.yaml charts/jenkins/
                     """
                 }

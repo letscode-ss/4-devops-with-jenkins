@@ -11,6 +11,9 @@ def jenkinsJob(jobName,repoUrl,credID,jenkinsFile) {
                 stringParam('GheToken', 'XXXXXXXXXXXX', 'Gihub Token (NOT SECURE)')
                 stringParam('OAuthClientID', 'XXXXXXXXXXX', 'OAuth application client id')
                 stringParam('OAuthClientSecret', 'XXXXXXXXX', 'OAuth application client secret(NOT SECURE)')
+                stringParam('costCenter', '21', 'cost center')
+                stringParam('cluster', 'cluster-1', 'Cluster name')
+                stringParam('region', 'us-central1-c', 'Cluster region')
         }
         logRotator(-1, 10, -1, -1) 
         definition {
