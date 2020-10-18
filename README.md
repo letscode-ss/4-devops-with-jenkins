@@ -51,7 +51,7 @@ Masking supported pattern matches of $TOKEN
 [Pipeline] script
 [Pipeline] {
 [Pipeline] sh
-+ rm -rf /Users/shisharm18/jenkins_docker_home/home/workspace/SelfService/Onboard-To-Jenkins/.git
++ rm -rf /Users/testusr/jenkins_docker_home/home/workspace/SelfService/Onboard-To-Jenkins/.git
 + gh repo view letscode-ss/team-x-jenkins-config
 GraphQL error: Could not resolve to a Repository with the name 'letscode-ss/team-x-jenkins-config'.
 + export exitcode=1
