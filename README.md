@@ -20,8 +20,17 @@ In this project i have create solution to provition and manage jenkins instance 
   - Perform helm release of jenkins.
 ![snap-3](docs//snap-3.png)
 
-Logs
+## Pipeline logs
 ```
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (GHE Login)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] withCredentials
 Masking supported pattern matches of $TOKEN
 [Pipeline] {
 [Pipeline] sh
@@ -39,28 +48,29 @@ Masking supported pattern matches of $TOKEN
 [Pipeline] {
 [Pipeline] sh
 + rm -rf /Users/shisharm18/jenkins_docker_home/home/workspace/SelfService/Onboard-To-Jenkins/.git
-+ gh repo view letscode-ss/team-a-jenkins-config
-GraphQL error: Could not resolve to a Repository with the name 'letscode-ss/team-a-jenkins-config'.
++ gh repo view letscode-ss/team-x-jenkins-config
+GraphQL error: Could not resolve to a Repository with the name 'letscode-ss/team-x-jenkins-config'.
 + export exitcode=1
 + exitcode=1
 + '[' 1 -ne 0 ']'
-+ gh repo create letscode-ss/team-a-jenkins-config -y --private
-https://github.com/letscode-ss/team-a-jenkins-config
-+ gh repo clone letscode-ss/team-a-jenkins-config
-Cloning into 'team-a-jenkins-config'...
++ gh repo create letscode-ss/team-x-jenkins-config -y --private
+https://github.com/letscode-ss/team-x-jenkins-config
++ gh repo clone letscode-ss/team-x-jenkins-config
+Cloning into 'team-x-jenkins-config'...
 warning: You appear to have cloned an empty repository.
-+ cp -r charts/jenkins/VALUES_SUMMARY.md team-a-jenkins-config/VALUES_SUMMARY.md
-+ cp -r onboard/Readme.md team-a-jenkins-config/Readme.md
-+ sed s/jenkins.example.com/team-a.test-jenkins.com/g charts/jenkins/values.yaml
-+ cd team-a-jenkins-config
-+ git add VALUES_SUMMARY.md values.yaml
++ cp -r charts/jenkins/VALUES_SUMMARY.md team-x-jenkins-config/VALUES_SUMMARY.md
++ sed s/jenkins.example.com/team-x.test-jenkins.com/g charts/jenkins/values.yaml
++ sed s/TEAMNAME/team-x/g onboard/Readme.md
++ cd team-x-jenkins-config
++ git add Readme.md VALUES_SUMMARY.md values.yaml
 + git commit -m 'updating config code'
-[master (root-commit) 8c787db] updating config code
- 2 files changed, 1060 insertions(+)
+[master (root-commit) 752ed33] updating config code
+ 3 files changed, 1080 insertions(+)
+ create mode 100644 Readme.md
  create mode 100644 VALUES_SUMMARY.md
  create mode 100644 values.yaml
 + git push -u origin master
-To https://github.com/letscode-ss/team-a-jenkins-config.git
+To https://github.com/letscode-ss/team-x-jenkins-config.git
  * [new branch]      master -> master
 Branch 'master' set up to track remote branch 'master' from 'origin'.
 [Pipeline] }
@@ -84,34 +94,34 @@ kubeconfig entry generated for cluster-1.
 [Pipeline] script
 [Pipeline] {
 [Pipeline] sh
-+ sed s/NAMESPACE/team-a-21/g onboard/namespace.yaml
-+ sed s/NAMESPACE/team-a-21/g onboard/serviceaccount.yaml
++ sed s/NAMESPACE/team-x-21/g onboard/namespace.yaml
++ sed s/NAMESPACE/team-x-21/g onboard/serviceaccount.yaml
 + kubectl apply -f onboard/namespace-apply.yaml
-namespace/team-a-21 unchanged
+namespace/team-x-21 unchanged
 + kubectl apply -f onboard/serviceaccount-apply.yaml
-serviceaccount/team-a-21-admin unchanged
-role.rbac.authorization.k8s.io/team-a-21-admin unchanged
-rolebinding.rbac.authorization.k8s.io/team-a-21-admin-rolebinding unchanged
-clusterrole.rbac.authorization.k8s.io/team-a-21-ClusterRole unchanged
-clusterrolebinding.rbac.authorization.k8s.io/team-a-21-ClusterRoleBinding unchanged
-+ kubectl config set-context --current --namespace=team-a-21
+serviceaccount/team-x-21-admin unchanged
+role.rbac.authorization.k8s.io/team-x-21-admin unchanged
+rolebinding.rbac.authorization.k8s.io/team-x-21-admin-rolebinding unchanged
+clusterrole.rbac.authorization.k8s.io/team-x-21-ClusterRole unchanged
+clusterrolebinding.rbac.authorization.k8s.io/team-x-21-ClusterRoleBinding unchanged
++ kubectl config set-context --current --namespace=team-x-21
 Context "gke_vast-operator-277120_us-central1-c_cluster-1" modified.
-+ helm upgrade --install jenkins-team-a-21 --values team-a-jenkins-config/values.yaml charts/jenkins/
-Release "jenkins-team-a-21" has been upgraded. Happy Helming!
-NAME: jenkins-team-a-21
-LAST DEPLOYED: Sun Oct 18 11:23:07 2020
-NAMESPACE: team-a-21
++ helm upgrade --install jenkins-team-x-21 --values team-x-jenkins-config/values.yaml charts/jenkins/
+Release "jenkins-team-x-21" does not exist. Installing it now.
+NAME: jenkins-team-x-21
+LAST DEPLOYED: Sun Oct 18 13:03:45 2020
+NAMESPACE: team-x-21
 STATUS: deployed
-REVISION: 2
+REVISION: 1
 NOTES:
 1. Get your 'admin' user password by running:
-  printf $(kubectl get secret --namespace team-a-21 jenkins-team-a-21 -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
+  printf $(kubectl get secret --namespace team-x-21 jenkins-team-x-21 -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 
-2. Visit http://team-a.test-jenkins.com
+2. Visit http://team-x.test-jenkins.com
 
 3. Login with the password from step 1 and the username: admin
 
-4. Use Jenkins Configuration as Code by specifying configScripts in your values.yaml file, see documentation: http://team-a.test-jenkins.com/configuration-as-code and examples: https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos
+4. Use Jenkins Configuration as Code by specifying configScripts in your values.yaml file, see documentation: http://team-x.test-jenkins.com/configuration-as-code and examples: https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos
 
 For more information on running Jenkins on Kubernetes, visit:
 https://cloud.google.com/solutions/jenkins-on-container-engine
@@ -151,6 +161,20 @@ github logout
 [Pipeline] // node
 [Pipeline] End of Pipeline
 Finished: SUCCESS
+```
+
+## Running Jenkins can be interacted with kubectl 
+```
+kubectl get pod -n team-x-21
+NAME                                 READY   STATUS    RESTARTS   AGE
+jenkins-team-x-21-59cf867f6d-gwlm8   2/2     Running   0          2m22s
+kubectl get ingress -n team-x-21
+NAME                HOSTS                     ADDRESS         PORTS   AGE
+jenkins-team-x-21   team-x.test-jenkins.com   xx.xx.xx.xx   80      2m29s
+kubectl get svc -n team-x-21
+NAME                      TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+jenkins-team-x-21         NodePort    10.8.12.163   <none>        8080:31389/TCP   2m54s
+jenkins-team-x-21-agent   ClusterIP   10.8.13.27    <none>        50000/TCP        2m54s
 ```
 
 ## Future enhancement

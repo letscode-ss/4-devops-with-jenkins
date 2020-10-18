@@ -1,5 +1,5 @@
 
-#TEAMNAME-jenkins-config
+# TEAMNAME-jenkins-config
 
 This repo contain configuration file for TEAMNAME jenkins instance. for any changes in plugins or configuration this this repo should be updated. 
 
