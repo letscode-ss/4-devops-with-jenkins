@@ -53,8 +53,8 @@ spec:
                             git config --global user.name "svcaccount"
                             git config --global user.email "svcaccount"
                         """
-                        def originUrl = "https://$USERNAME:$PASSWORD@github.com/$orgName/$repoConfig.git"
                         withCredentials([usernamePassword(credentialsId: 'github_personal', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        def originUrl = "https://$USERNAME:$PASSWORD@github.com/$orgName/$repoConfig.git"
                         sh """
                             #!/bin/bash -vx
                             rm -rf ${WORKSPACE}/.git
