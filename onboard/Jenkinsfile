@@ -54,7 +54,7 @@ spec:
                             git config --global user.email "svcaccount"
                         """
                         withCredentials([usernamePassword(credentialsId: 'github_personal', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        def originUrl = "https://$USERNAME:$PASSWORD@github.com/$orgName/$repoConfig.git"
+                        def originUrl = "https://$USERNAME:$PASSWORD@github.com/$orgName/$repoConfig" + '.git'
                         sh """
                             #!/bin/bash -vx
                             rm -rf ${WORKSPACE}/.git
