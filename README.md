@@ -185,7 +185,7 @@ jenkins-team-x-21-agent   ClusterIP   10.8.13.27    <none>        50000/TCP     
 ```
 
 ## Future enhancement
+- Switch onboarding pipeline agent from master to kubernetes to avoid many cli tools on master - DONE
 - GHE oauth integration
 - Enable SSL
 - Enable Github orgnization job in jenkins
-- Switch onboarding pipeline agent from master to kubernetes to avoid many cli tools on master. - DONE
