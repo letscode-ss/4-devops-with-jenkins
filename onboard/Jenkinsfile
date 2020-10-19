@@ -9,7 +9,6 @@ metadata:
   labels:
     app: onboarding
 spec:
-  default-container: gcloud-container
   containers:
   - name: gcloud-container
     image: containerci/gcloud-container:latest
@@ -34,11 +33,14 @@ spec:
         stage("GHE Login") { 
             steps {
                 script { 
-                    withCredentials([string(credentialsId: tokenAuth, variable: 'TOKEN')]) {
-                        sh """
-                                echo ${TOKEN} > /tmp/token.txt
-                                gh auth login --with-token < /tmp/token.txt
-                        """
+                    container("gcloud-container") { 
+                        withCredentials([string(credentialsId: tokenAuth, variable: 'TOKEN')]) {
+                            sh """
+                                    echo ${TOKEN} > /tmp/token.txt
+                                    gh auth login --with-token < /tmp/token.txt
+                            """
+                        }
+
                     }
                 }
             }
@@ -46,34 +48,38 @@ spec:
         stage("Create jenkins config") { 
             steps {
                 script { 
-                    sh """
-                        #!/bin/bash -vx
-                        rm -rf ${WORKSPACE}/.git
-                        gh repo view $orgName/$repoConfig || export exitcode=\$?
-                        if [ \$exitcode -ne 0 ]; then 
-                            gh repo create $orgName/$repoConfig -y --private
-                            gh repo clone $orgName/$repoConfig || echo checkout already exist
-                            cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
-                            sed  's/jenkins.example.com/${jenkinsUrl}/g'   charts/jenkins/values.yaml > $repoConfig/values.yaml
-                            sed  's/TEAMNAME/${teamName}/g' onboard/Readme.md > $repoConfig/Readme.md
-                            cd $repoConfig && git add Readme.md VALUES_SUMMARY.md values.yaml && git commit -m "updating config code" && git push -u origin master
-                        else
-                            echo Repo already exist
-                            gh repo clone $orgName/$repoConfig
-                        fi
-                    """
+                    container("gcloud-container") { 
+                        sh """
+                            #!/bin/bash -vx
+                            rm -rf ${WORKSPACE}/.git
+                            gh repo view $orgName/$repoConfig || export exitcode=\$?
+                            if [ \$exitcode -ne 0 ]; then 
+                                gh repo create $orgName/$repoConfig -y --private
+                                gh repo clone $orgName/$repoConfig || echo checkout already exist
+                                cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
+                                sed  's/jenkins.example.com/${jenkinsUrl}/g'   charts/jenkins/values.yaml > $repoConfig/values.yaml
+                                sed  's/TEAMNAME/${teamName}/g' onboard/Readme.md > $repoConfig/Readme.md
+                                cd $repoConfig && git add Readme.md VALUES_SUMMARY.md values.yaml && git commit -m "updating config code" && git push -u origin master
+                            else
+                                echo Repo already exist
+                                gh repo clone $orgName/$repoConfig
+                            fi
+                        """
+                    }
                 }
             }
         }
         stage("Cluster Auth") { 
             steps {
                 script { 
-                    withCredentials([file(credentialsId: 'gcloud-creds', variable: 'FILE')]) {
-                    sh """
-                        gcloud config set project vast-operator-277120
-                        gcloud auth activate-service-account --key-file=$FILE
-                        gcloud container clusters get-credentials ${cluster} --zone=${region}
-                    """
+                    container("gcloud-container") { 
+                        withCredentials([file(credentialsId: 'gcloud-creds', variable: 'FILE')]) {
+                        sh """
+                            gcloud config set project vast-operator-277120
+                            gcloud auth activate-service-account --key-file=$FILE
+                            gcloud container clusters get-credentials ${cluster} --zone=${region}
+                        """
+                        }
                     }
                 }
             }
@@ -81,15 +87,17 @@ spec:
         stage("Install Jenkis") { 
             steps {
                 script {                 
-                    sh """
-                        sed  's/NAMESPACE/${namespace}/g' onboard/namespace.yaml  > onboard/namespace-apply.yaml
-                        sed  's/NAMESPACE/${namespace}/g' onboard/serviceaccount.yaml > onboard/serviceaccount-apply.yaml
-                        
-                        kubectl apply -f onboard/namespace-apply.yaml
-                        kubectl apply -f onboard/serviceaccount-apply.yaml
-                        kubectl config set-context --current --namespace=${namespace}
-                        helm upgrade --install jenkins-${namespace} --values ${repoConfig}/values.yaml charts/jenkins/
-                    """
+                    container("gcloud-container") { 
+                        sh """
+                            sed  's/NAMESPACE/${namespace}/g' onboard/namespace.yaml  > onboard/namespace-apply.yaml
+                            sed  's/NAMESPACE/${namespace}/g' onboard/serviceaccount.yaml > onboard/serviceaccount-apply.yaml
+                            
+                            kubectl apply -f onboard/namespace-apply.yaml
+                            kubectl apply -f onboard/serviceaccount-apply.yaml
+                            kubectl config set-context --current --namespace=${namespace}
+                            helm upgrade --install jenkins-${namespace} --values ${repoConfig}/values.yaml charts/jenkins/
+                        """
+                    }
                 }
             }
         }
@@ -104,11 +112,14 @@ spec:
     post {
         always {
             script {
+                container("gcloud-container") { 
                 sh """
                    rm -rf  /tmp/token.txt
                    echo github logout
                    # gh auth logout
+                   # Logout gcloud
                 """
+                }
             }
         }
     }
