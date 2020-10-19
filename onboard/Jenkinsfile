@@ -50,8 +50,8 @@ spec:
                 script { 
                     container("gcloud-container") { 
                         sh """
-                            git config --global user.name "svcusr"
-                            git config --global user.email "svcusr"
+                            git config --global user.name "svcaccount"
+                            git config --global user.email "svcaccount"
                         """
                         withCredentials([usernamePassword(credentialsId: 'github_personal', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh """
