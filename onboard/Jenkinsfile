@@ -1,7 +1,26 @@
 
 
 pipeline {
-    agent { label 'master' }
+    agent {
+        kubernetes {
+           label "jenkins-onboarding-${UUID.randomUUID().toString()}"
+           yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: onboarding
+spec:
+  default-container: gcloud-container
+  containers:
+  - name: gcloud-container
+    image: containerci/gcloud-container:latest
+    imagePullPolicy: Never
+    tty: true
+    command: ["cat"]
+"""
+		}
+    }
     environment {
         orgName="${params.orgName}"
         teamName="${params.teamName}"
@@ -11,6 +30,7 @@ pipeline {
         cluster="${params.cluster}"
         tokenAuth="${params.gheTokenCreds}"
         region="${params.region}"
+        project="${params.project}"
     }
     stages {
         stage("GHE Login") { 
@@ -50,7 +70,10 @@ pipeline {
         stage("Cluster Auth") { 
             steps {
                 script { 
+                    withCredentials([file(credentialsId: 'gcloud-creds', variable: 'FILE')]) {
                     sh """
+                        gcloud config set project vast-operator-277120
+                        gcloud auth activate-service-account --key-file=$FILE
                         gcloud container clusters get-credentials ${cluster} --zone=${region}
                     """
                 }

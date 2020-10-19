@@ -13,6 +13,7 @@ def jenkinsJob(jobName,repoUrl,credID,jenkinsFile) {
                 stringParam('costCenter', '21', 'cost center')
                 stringParam('cluster', 'cluster-1', 'Cluster name')
                 stringParam('region', 'us-central1-c', 'Cluster region')
+                stringParam('project', 'vast-operator-277120', 'GCP project name')
         }
         logRotator(-1, 10, -1, -1) 
         definition {
