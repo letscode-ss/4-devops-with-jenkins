@@ -9,9 +9,9 @@ In this project i have create solution to provition and manage jenkins instance 
 
 ## Configure Jenkins Creds
 You need to configure below credentials before running onboarding job.
-teamA-ghe-token	- Secret type credentails which holds token for GHE
-github_personal - Usesrname pasword for github. 
-gcloud-creds - Secret file type credentail for Gcloud service account json. ([Follow the link to create service account](https://cloud.google.com/solutions/using-jenkins-for-distributed-builds-on-compute-engine
+- teamA-ghe-token	-> Secret type credentails which holds token for GHE
+- github_personal -> Usesrname pasword for github. 
+- gcloud-creds -> Secret file type credentail for Gcloud service account json. ([Follow the link to create service account](https://cloud.google.com/solutions/using-jenkins-for-distributed-builds-on-compute-engine
 ))
 
 ## How this solution works
