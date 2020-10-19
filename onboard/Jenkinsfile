@@ -55,7 +55,7 @@ spec:
                             rm -rf ${WORKSPACE}/.git
                             gh repo view $orgName/$repoConfig || export exitcode=\$?
                             if [ \$exitcode -ne 0 ]; then 
-                                git remote add origin https://{USERNAME}:{PASSWORD}@github.com/$orgName/$repoConfig
+                                git remote add origin https://{$USERNAME}:{$PASSWORD}@github.com/$orgName/$repoConfig
                                 gh repo create $orgName/$repoConfig -y --public
                                 gh repo clone $orgName/$repoConfig || echo checkout already exist
                                 cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
