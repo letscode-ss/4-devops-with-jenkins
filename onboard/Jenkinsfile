@@ -55,7 +55,7 @@ spec:
                             rm -rf ${WORKSPACE}/.git
                             gh repo view $orgName/$repoConfig || export exitcode=\$?
                             if [ \$exitcode -ne 0 ]; then 
-                                git remote add origin https://{USERNAME}:{PASSWORD}@github.com/$orgName/$repoConfig.git
+                                git remote add origin https://{USERNAME}:{PASSWORD}@github.com/$orgName/$repoConfig
                                 gh repo create $orgName/$repoConfig -y --public
                                 gh repo clone $orgName/$repoConfig || echo checkout already exist
                                 cp -r  charts/jenkins/VALUES_SUMMARY.md $repoConfig/VALUES_SUMMARY.md
@@ -64,7 +64,7 @@ spec:
                                 cd $repoConfig && git add Readme.md VALUES_SUMMARY.md values.yaml && git commit -m "updating config code" && git push -u origin master
                             else
                                 echo Repo already exist
-                                git remote add origin https://{USERNAME}:{PASSWORD}@github.com/$orgName/$repoConfig.git
+                                git remote add origin https://{USERNAME}:{PASSWORD}@github.com/$orgName/$repoConfig
                                 gh repo clone $orgName/$repoConfig
                             fi
                         """
