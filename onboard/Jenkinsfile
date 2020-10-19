@@ -50,8 +50,8 @@ spec:
                 script { 
                     container("gcloud-container") { 
                         sh """
-                            git config --global user.name "svcaccount"
-                            git config --global user.email "svcaccount"
+                            git config --global user.name "$teamName"
+                            git config --global user.email "$teamName"
                         """
                         withCredentials([usernamePassword(credentialsId: 'github_personal', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         def originUrl = "https://$USERNAME:$PASSWORD@github.com/$orgName/$repoConfig" + '.git'
