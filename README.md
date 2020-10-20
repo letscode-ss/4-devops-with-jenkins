@@ -9,7 +9,7 @@ In this project i have create solution to provition and manage jenkins instance 
 
 ## Configure Jenkins Creds
 You need to configure below credentials before running onboarding job.
-- '<teamname>-ghe-token'	-> Secret type credentails which holds token for GHE
+- teamname-ghe-token	-> Secret type credentails which holds token for GHE
 - github_personal -> Usesrname pasword for github. 
 - gcloud-creds -> Secret file type credentail for Gcloud service account json. ([Follow the link to create service account](https://cloud.google.com/solutions/using-jenkins-for-distributed-builds-on-compute-engine
 ))
@@ -187,5 +187,6 @@ jenkins-team-x-21-agent   ClusterIP   10.8.13.27    <none>        50000/TCP     
 ## Future enhancement
 - Switch onboarding pipeline agent from master to kubernetes to avoid many cli tools on master - DONE
 - GHE oauth integration
+- Move code from Jenkinsfile to jenkins shared library.
 - Enable SSL
 - Enable Github orgnization job in jenkins
