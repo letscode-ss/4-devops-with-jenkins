@@ -12,7 +12,7 @@ spec:
   containers:
   - name: gcloud-container
     image: containerci/gcloud-container:latest
-    imagePullPolicy: Never
+    imagePullPolicy: Always
     tty: true
     command: ["cat"]
 """
